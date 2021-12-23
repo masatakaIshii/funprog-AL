@@ -4,8 +4,8 @@ import fr.esgi.al.funprog.model.{Direction, LawnMower, Point}
 import org.scalatest.funspec.AnyFunSpec
 import org.scalatest.matchers.should.Matchers.convertToAnyShouldWrapper
 
-class GetPointsOfOthersSpec extends AnyFunSpec {
-  val getPointOthersLawnMowers: GetPointsOfOthers = GetPointsOfOthers()
+class GetPointsOfOthersByIndexSpec extends AnyFunSpec {
+  val getPointOthersLawnMowers: GetPointsOfOthersByIndex = GetPointsOfOthersByIndex()
 
   describe("when list lawnmower contain zero element") {
     describe("when curIndex is 0") {

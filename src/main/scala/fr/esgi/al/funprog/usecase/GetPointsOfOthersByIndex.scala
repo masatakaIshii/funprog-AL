@@ -4,7 +4,7 @@ import fr.esgi.al.funprog.model.{LawnMower, Point}
 
 import scala.annotation.tailrec
 
-class GetPointsOfOthers {
+class GetPointsOfOthersByIndex {
   def execute(concernedIndex: Int, listLawnMower: List[LawnMower]): List[Point] = {
     if (concernedIndex < 0 || listLawnMower.size <= concernedIndex) {
       List()
@@ -26,6 +26,6 @@ class GetPointsOfOthers {
   }
 }
 
-object GetPointsOfOthers {
-  def apply(): GetPointsOfOthers = new GetPointsOfOthers()
+object GetPointsOfOthersByIndex {
+  def apply(): GetPointsOfOthersByIndex = new GetPointsOfOthersByIndex()
 }
