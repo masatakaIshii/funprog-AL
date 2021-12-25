@@ -4,13 +4,9 @@ import fr.esgi.al.funprog.model.{LawnMower, Point}
 
 class GetPointsOfOthers {
   def execute(concernedLawnMower: LawnMower, listLawnMower: List[LawnMower]): List[Point] = {
-    if (listLawnMower.isEmpty) {
-      List ()
-    } else {
-      listLawnMower
-        .filter(lawnMower => lawnMower != concernedLawnMower)
-        .map(lawnMower => lawnMower.end._1)
-    }
+    listLawnMower
+      .filter(lawnMower => lawnMower != concernedLawnMower)
+      .map(lawnMower => lawnMower.end._1)
   }
 }
 
