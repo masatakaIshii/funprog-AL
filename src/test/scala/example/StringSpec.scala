@@ -4,7 +4,7 @@ import org.scalatest.funsuite.AnyFunSuite
 
 class StringSpec extends AnyFunSuite {
 
-  test("CHaine vide est  vide") {
+  test("Chaine vide est  vide") {
     assert("" == "")
   }
 

@@ -1,5 +1,7 @@
 package fr.esgi.al.funprog
 
+import fr.esgi.al.funprog.model.Direction
+
 object Main extends App {
   println("Ici le programme principal")
   // Le code suivant ne compilera pas.

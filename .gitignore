@@ -1,6 +1,7 @@
 target/
 project/target
 project/project/target
+project/.DS_Store
 .bsp
 
 .idea
