@@ -18,7 +18,15 @@ object Direction {
     case "S" => S
     case "E" => E
     case "W" => W
-    case _ => NotDirection
+    case _   => NotDirection
+  }
+
+  def mapFromChar(maybeDirection: Char): Direction = maybeDirection match {
+    case 'N'  => N
+    case 'S'  => S
+    case 'E'  => E
+    case 'W'  => W
+    case _   => NotDirection
   }
 
   def mapToString(direction: Direction): String = direction match {
