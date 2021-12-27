@@ -1,5 +1,7 @@
 package fr.esgi.al.funprog.model
 
+import play.api.libs.json.{JsString, JsValue, Writes}
+
 sealed trait Instruction extends Product with Serializable
 
 object Instruction {
@@ -32,4 +34,9 @@ object Instruction {
     case D              => "D"
     case NotInstruction => "not instruction"
   }
+
+  implicit object WritesInstruction extends Writes[Instruction] {
+    override def writes(o: Instruction): JsValue = JsString(Instruction.mapToString(o))
+  }
+
 }
