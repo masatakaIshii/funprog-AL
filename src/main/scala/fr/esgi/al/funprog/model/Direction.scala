@@ -1,5 +1,7 @@
 package fr.esgi.al.funprog.model
 
+import play.api.libs.json.{JsString, JsValue, Writes}
+
 sealed trait Direction extends Product with Serializable
 
 object Direction {
@@ -18,7 +20,15 @@ object Direction {
     case "S" => S
     case "E" => E
     case "W" => W
-    case _ => NotDirection
+    case _   => NotDirection
+  }
+
+  def mapFromChar(maybeDirection: Char): Direction = maybeDirection match {
+    case 'N'  => N
+    case 'S'  => S
+    case 'E'  => E
+    case 'W'  => W
+    case _   => NotDirection
   }
 
   def mapToString(direction: Direction): String = direction match {
@@ -27,5 +37,9 @@ object Direction {
     case E => "E"
     case W => "W"
     case _ => "not direction"
+  }
+
+  implicit object WritesDirection extends Writes[Direction] {
+    override def writes(o: Direction): JsValue = JsString(Direction.mapToString(o))
   }
 }

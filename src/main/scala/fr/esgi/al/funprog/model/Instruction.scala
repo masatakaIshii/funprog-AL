@@ -1,5 +1,7 @@
 package fr.esgi.al.funprog.model
 
+import play.api.libs.json.{JsString, JsValue, Writes}
+
 sealed trait Instruction extends Product with Serializable
 
 object Instruction {
@@ -11,17 +13,30 @@ object Instruction {
 
   final case object NotInstruction extends Instruction
 
-  def mapFromString(maybeInstruction: String): Instruction = maybeInstruction match {
-    case "A" => A
-    case "G" => G
-    case "D" => D
-    case _ => NotInstruction
+  def mapFromString(maybeInstruction: String): Instruction =
+    maybeInstruction match {
+      case "A" => A
+      case "G" => G
+      case "D" => D
+      case _   => NotInstruction
+    }
+
+  def mapFromChar(maybeInstruction: Char): Instruction = maybeInstruction match {
+    case 'A'  => A
+    case 'G'  => G
+    case 'D'  => D
+    case _   => NotInstruction
   }
 
   def mapToString(instruction: Instruction): String = instruction match {
-    case A => "A"
-    case G => "G"
-    case D => "D"
+    case A              => "A"
+    case G              => "G"
+    case D              => "D"
     case NotInstruction => "not instruction"
   }
+
+  implicit object WritesInstruction extends Writes[Instruction] {
+    override def writes(o: Instruction): JsValue = JsString(Instruction.mapToString(o))
+  }
+
 }
