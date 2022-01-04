@@ -112,5 +112,47 @@ class StartGivenLawnMowerSpec extends AnyFunSpec {
         }
       }
     }
+    describe("when given lawnMover point is (x=1, y=1), direction=N") {
+      describe("and instructions=[D]") {
+        val lawnMower = LawnMower(
+          start = (
+            Point(x = 1, y = 1),
+            Direction.N
+          ),
+          instructions = List(Instruction.D),
+          end = (
+            Point(x = 1, y = 1),
+            Direction.N
+          )
+        )
+        it("should change direction to direction=E") {
+          val expectedLawnMower = lawnMower.copy(end = (
+            Point(x = 1, y = 1),
+            Direction.E
+          ))
+          startGivenLawnMower.execute(limit, lawnMower) shouldBe expectedLawnMower
+        }
+      }
+      describe("and instructions=[G]") {
+        val lawnMower = LawnMower(
+          start = (
+            Point(x = 1, y = 1),
+            Direction.N
+          ),
+          instructions = List(Instruction.G),
+          end = (
+            Point(x = 1, y = 1),
+            Direction.N
+          )
+        )
+        it("should change direction to direction=W") {
+          val expectedLawnMower = lawnMower.copy(end = (
+            Point(x = 1, y = 1),
+            Direction.W
+          ))
+          startGivenLawnMower.execute(limit, lawnMower) shouldBe expectedLawnMower
+        }
+      }
+    }
   }
 }

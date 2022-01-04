@@ -1,6 +1,6 @@
 package fr.esgi.al.funprog.usecase
 
-import fr.esgi.al.funprog.action.Action
+import fr.esgi.al.funprog.action.{Action, MoveAction, TurnLeft, TurnRight}
 import fr.esgi.al.funprog.model._
 
 import scala.annotation.tailrec
@@ -21,15 +21,16 @@ class StartGivenLawnMower {
 
   private def updateEndByInstruction(end: (Point, Direction), instruction: Instruction, limit: Point): (Point, Direction) = instruction match {
     case Instruction.A =>
-      val newPoint = Action.of[(Point, Direction), Point].run(end)
-      if (isPointNotCorrect(newPoint, limit)) {
+      val moveActionResult = Action.of[MoveAction].run(MoveAction(end._1, end._2))
+      if (isPointNotCorrect(moveActionResult.point, limit)) {
         end
       } else {
-        (newPoint, end._2)
+        (moveActionResult.point, end._2)
       }
-    case Instruction.D | Instruction.G =>
-      val newDirection = Action.of[(Instruction, Direction), Direction].run((instruction, end._2))
-      (end._1, newDirection)
+    case Instruction.D =>
+      (end._1, Action.of[TurnRight].run(TurnRight(end._2)).direction)
+    case Instruction.G =>
+      (end._1, Action.of[TurnLeft].run(TurnLeft(end._2)).direction)
     case _ => end
   }
 
