@@ -8,7 +8,7 @@ class SaveToJsonFile {
     val pathFile = "results/" + filename
     val f = File(pathFile)
     val jsonString = Json prettyPrint json
-    f.createIfNotExists().overwrite("").append(jsonString)
+    f.createIfNotExists(createParents = true).overwrite("").append(jsonString)
 
     pathFile
   }

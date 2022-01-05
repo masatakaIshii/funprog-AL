@@ -11,34 +11,34 @@ class FunProgIT extends AnyFunSpec {
   describe("given limit, inputs and output provided by statement") {
     val limit = Point(x = 5, y = 5)
     val firstLawnMower = LawnMower(
-      start = (
+      start = Position(
         Point(x = 1, y = 2),
         Direction.N
       ),
       instructions = List(Instruction.G, Instruction.A, Instruction.G, Instruction.A, Instruction.G, Instruction.A, Instruction.G, Instruction.A, Instruction.A),
-      end = (
+      end = Position(
         Point(x = 1, y = 2),
         Direction.N
       )
     )
     val secondLawnMower = LawnMower(
-      start = (
+      start = Position(
         Point(x = 3, y = 3),
         Direction.E
       ),
       instructions = List(Instruction.A, Instruction.A, Instruction.D, Instruction.A, Instruction.A, Instruction.D, Instruction.A, Instruction.D, Instruction.D, Instruction.A),
-      end = (
+      end = Position(
         Point(x = 3, y = 3),
         Direction.E
       )
     )
     val inputList = List(firstLawnMower, secondLawnMower)
 
-    val expectFirstLawnMower = firstLawnMower.copy(end = (
+    val expectFirstLawnMower = firstLawnMower.copy(end = Position(
       Point(x = 1, y = 3),
       Direction.N
     ))
-    val expectSecondLawnMower = secondLawnMower.copy(end = (
+    val expectSecondLawnMower = secondLawnMower.copy(end = Position(
       Point(x = 5, y = 1),
       Direction.E
     ))
@@ -51,24 +51,24 @@ class FunProgIT extends AnyFunSpec {
     val limit = Point(x = 1, y = 1)
     describe("first lawn mower") {
       val firstLawnMower = LawnMower(
-        start = (
+        start = Position(
           Point(x = 0, y = 0),
           Direction.N
         ),
         instructions = List(Instruction.A, Instruction.D, Instruction.A, Instruction.A, Instruction.A),
-        end = (
+        end = Position(
           Point(x = 0, y = 0),
           Direction.N
         )
       )
       describe("second lawn mower") {
         val secondLawnMower = LawnMower(
-          start = (
+          start = Position(
             Point(x = 1, y = 1),
             Direction.N
           ),
           instructions = List(Instruction.G, Instruction.A, Instruction.A),
-          end = (
+          end = Position(
             Point(x = 1, y = 1),
             Direction.N
           )
@@ -76,8 +76,8 @@ class FunProgIT extends AnyFunSpec {
         it("should return expected result") {
           val inputList = List(firstLawnMower, secondLawnMower)
 
-          val expectedFirstLawnMower = firstLawnMower.copy(end = (Point(x = 1, y = 1), Direction.E))
-          val expectedSecondLawnMower = secondLawnMower.copy(end = (Point(x = 0, y = 1), Direction.W))
+          val expectedFirstLawnMower = firstLawnMower.copy(end = Position(Point(x = 1, y = 1), Direction.E))
+          val expectedSecondLawnMower = secondLawnMower.copy(end = Position(Point(x = 0, y = 1), Direction.W))
           val outputList = List(expectedFirstLawnMower, expectedSecondLawnMower)
 
           funProg.start(limit, inputList) shouldBe outputList

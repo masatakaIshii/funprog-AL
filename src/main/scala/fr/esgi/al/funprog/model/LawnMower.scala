@@ -4,9 +4,9 @@ import play.api.libs.json.{JsValue, Json, Writes}
 
 
 case class LawnMower
-(start: (Point, Direction),
+(start: Position,
  instructions: List[Instruction],
- end: (Point, Direction)
+ end: Position
 )
 object LawnMower {
   implicit object WritesLawnMower extends Writes[LawnMower] {

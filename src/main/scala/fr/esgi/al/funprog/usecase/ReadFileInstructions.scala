@@ -1,7 +1,7 @@
 package fr.esgi.al.funprog.usecase
 
 import better.files.File
-import fr.esgi.al.funprog.model.{Direction, Instruction, LawnMower, Point}
+import fr.esgi.al.funprog.model.{Direction, Instruction, LawnMower, Point, Position}
 
 import scala.collection.mutable.ListBuffer
 
@@ -36,7 +36,7 @@ class ReadFileInstructions {
       val lowMowerInstructions = lowMowersInformation(idx + 1)
       val listInstructions = lowMowerInstructions.map(instruction => Instruction.mapFromChar(instruction))
 
-      val lawnMower = LawnMower(start = (startPoint,direction), instructions = listInstructions.toList, end = (startPoint, direction))
+      val lawnMower = LawnMower(start = Position(startPoint,direction), instructions = listInstructions.toList, end = Position(startPoint, direction))
       lawnMowers += lawnMower
     }
 

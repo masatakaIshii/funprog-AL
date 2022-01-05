@@ -12,20 +12,20 @@ class StartGivenLawnMower {
   }
 
   @tailrec
-  private def getNewEnd(instructions: List[Instruction], end: (Point, Direction), limit: Point): (Point, Direction) = instructions match {
+  private def getNewEnd(instructions: List[Instruction], end: Position, limit: Point): Position = instructions match {
     case head :: tail =>
       val updatedEnd = updateEndByInstruction(end, head, limit)
       getNewEnd(tail, updatedEnd, limit)
     case Nil => end
   }
 
-  private def updateEndByInstruction(end: (Point, Direction), instruction: Instruction, limit: Point): (Point, Direction) = instruction match {
+  private def updateEndByInstruction(end: Position, instruction: Instruction, limit: Point): Position = instruction match {
     case Instruction.A =>
-      val moveActionResult = Action.of[MoveAction].run(MoveAction(end._1, end._2, limit))
-      (moveActionResult.point, end._2)
+      val moveActionResult = Action.of[MoveAction].run(MoveAction(end.point, end.direction, limit))
+      Position(moveActionResult.point, end.direction)
     case Instruction.D | Instruction.G =>
-      val newDirection = getNewDirectionByInstruction(end._2, instruction)
-      (end._1, newDirection)
+      val newDirection = getNewDirectionByInstruction(end.direction, instruction)
+      Position(end.point, newDirection)
     case _ => end
   }
 
