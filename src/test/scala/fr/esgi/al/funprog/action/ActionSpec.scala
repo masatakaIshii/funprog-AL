@@ -7,50 +7,112 @@ import org.scalatest.matchers.should.Matchers.convertToAnyShouldWrapper
 class ActionSpec extends AnyFunSpec {
   describe("ActionMove") {
     val actionMove = Action.ActionMove
-    describe("when move action have point is (x=1, y=1)") {
-      val point = Point(x = 1, y = 1)
-      describe("and direction is N") {
-        val direction = Direction.N
-        it("should return move action with point (x=1, y=2) and direction N") {
-          val moveAction = MoveAction(point, direction);
-          val expectedMoveAction = MoveAction(
-            Point(x = 1, y = 2),
-            direction
-          )
-          actionMove.run(moveAction) shouldBe expectedMoveAction
+    describe("when move action have limit (x=3, y=3)") {
+      val limit = Point(x = 3, y = 3)
+      describe("and point is (x=1, y=1)") {
+        val point = Point(x = 1, y = 1)
+
+        describe("and direction is N") {
+          val direction = Direction.N
+          it("should return move action with point (x=1, y=2) and direction N") {
+            val moveAction = MoveAction(point, direction, limit)
+            val expectedMoveAction = MoveAction(
+              Point(x = 1, y = 2),
+              direction,
+              limit
+            )
+            actionMove.run(moveAction) shouldBe expectedMoveAction
+          }
+        }
+        describe("and direction is S") {
+          val direction = Direction.S
+          it("should return move action with point (x=1, y=0) and direction N") {
+            val moveAction = MoveAction(point, direction, limit)
+            val expectedMoveAction = MoveAction(
+              Point(x = 1, y = 0),
+              direction,
+              limit
+            )
+            actionMove.run(moveAction) shouldBe expectedMoveAction
+          }
+        }
+        describe("and direction is E") {
+          val direction = Direction.E
+          it("should return move action with point (x=2, y=1) and direction E") {
+            val moveAction = MoveAction(point, direction, limit)
+            val expectedMoveAction = MoveAction(
+              Point(x = 2, y = 1),
+              direction,
+              limit
+            )
+            actionMove.run(moveAction) shouldBe expectedMoveAction
+          }
+        }
+        describe("and direction is W") {
+          val direction = Direction.W
+          it("should return move action with point (x=0, y=1) and direction W") {
+            val moveAction = MoveAction(point, direction, limit)
+            val expectedMoveAction = MoveAction(
+              Point(x = 0, y = 1),
+              direction,
+              limit
+            )
+            actionMove.run(moveAction) shouldBe expectedMoveAction
+          }
         }
       }
-      describe("and direction is S") {
-        val direction = Direction.S
-        it("should return move action with point (x=1, y=0) and direction N") {
-          val moveAction = MoveAction(point, direction);
-          val expectedMoveAction = MoveAction(
-            Point(x = 1, y = 0),
-            direction
-          )
-          actionMove.run(moveAction) shouldBe expectedMoveAction
+    }
+    describe("when move action have (x=0, y=0)") {
+      val limit = Point(0, 0)
+      describe("and point is (x=0, y=0)") {
+        val point = Point(x=0, y=0)
+        describe("and direction is N") {
+          val direction = Direction.N
+          it("should return move action with point (x=0, y=0) and direction N") {
+            val moveAction = MoveAction(point, direction, limit)
+            val expectedMoveAction = MoveAction(
+              Point(x = 0, y = 0),
+              direction,
+              limit
+            )
+            actionMove.run(moveAction) shouldBe expectedMoveAction
+          }
         }
-      }
-      describe("and direction is E") {
-        val direction = Direction.E
-        it("should return move action with point (x=2, y=1) and direction E") {
-          val moveAction = MoveAction(point, direction);
-          val expectedMoveAction = MoveAction(
-            Point(x = 2, y = 1),
-            direction
-          )
-          actionMove.run(moveAction) shouldBe expectedMoveAction
+        describe("and direction is S") {
+          val direction = Direction.S
+          it ("should return move action with point (x=0, y=0) and direction S") {
+            val moveAction = MoveAction(point, direction, limit)
+            val expectedMoveAction = MoveAction(
+              Point(x = 0, y = 0),
+              direction,
+              limit
+            )
+            actionMove.run(moveAction) shouldBe expectedMoveAction
+          }
         }
-      }
-      describe("and direction is W") {
-        val direction = Direction.W
-        it("should return move action with point (x=0, y=1) and direction W") {
-          val moveAction = MoveAction(point, direction);
-          val expectedMoveAction = MoveAction(
-            Point(x = 0, y = 1),
-            direction
-          )
-          actionMove.run(moveAction) shouldBe expectedMoveAction
+        describe("and direction is E") {
+          val direction = Direction.E
+          it ("should return move action with point (x=0, y=0) and direction E") {
+            val moveAction = MoveAction(point, direction, limit)
+            val expectedMoveAction = MoveAction(
+              Point(x = 0, y = 0),
+              direction,
+              limit
+            )
+            actionMove.run(moveAction) shouldBe expectedMoveAction
+          }
+        }
+        describe("and direction is W") {
+          val direction = Direction.W
+          it ("should return move action with point (x=0, y=0) and direction W") {
+            val moveAction = MoveAction(point, direction, limit)
+            val expectedMoveAction = MoveAction(
+              Point(x = 0, y = 0),
+              direction,
+              limit
+            )
+            actionMove.run(moveAction) shouldBe expectedMoveAction
+          }
         }
       }
     }

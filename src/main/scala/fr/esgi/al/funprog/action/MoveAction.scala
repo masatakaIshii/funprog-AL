@@ -5,5 +5,6 @@ import fr.esgi.al.funprog.model.{Direction, Point}
 case class MoveAction
 (
   point: Point,
-  direction: Direction
+  direction: Direction,
+  limit: Point
 )
