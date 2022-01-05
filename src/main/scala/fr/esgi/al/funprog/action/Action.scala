@@ -1,45 +1,64 @@
 package fr.esgi.al.funprog.action
 
-import fr.esgi.al.funprog.model.{Direction, Instruction, Point}
+import fr.esgi.al.funprog.model.{Direction, Point}
 
-trait Action[A, B] {
-  def run(data: A): B
+trait Action[A] {
+  def run(data: A): A
 }
 
 object Action {
-  implicit object ActionMove extends Action[(Point, Direction), Point] {
-    override def run(data: (Point, Direction)): Point = data match {
-      case (point: Point, Direction.N) => Point(point.x, point.y + 1)
-      case (point: Point, Direction.S) => Point(point.x, point.y - 1)
-      case (point: Point, Direction.E) => Point(point.x + 1, point.y)
-      case (point: Point, Direction.W) => Point(point.x - 1, point.y)
-      case _ => data._1
+  implicit object ActionMove extends Action[MoveAction] {
+    override def run(data: MoveAction): MoveAction = data.direction match {
+      case Direction.N => buildNewDataIfLimitYGreaterThanPointY(data)(Point(data.point.x, data.point.y + 1))
+      case Direction.S => buildNewDataIfPointYMoreThanZero(data)(Point(data.point.x, data.point.y - 1))
+      case Direction.E => buildNewDataIfLimitXGreaterThanPointX(data)(Point(data.point.x + 1, data.point.y))
+      case Direction.W => buildNewDataIfPointXMoreThanZero(data)(Point(data.point.x - 1, data.point.y))
+      case _ => data
+    }
+    private def buildNewDataIfLimitYGreaterThanPointY =
+      buildNewDataIfValid((data: MoveAction) => data.limit.y > data.point.y) _
+
+    private def buildNewDataIfPointYMoreThanZero =
+      buildNewDataIfValid((data: MoveAction) => data.point.y > 0) _
+
+    private def buildNewDataIfLimitXGreaterThanPointX =
+      buildNewDataIfValid((data: MoveAction) => data.limit.x > data.point.x) _
+
+    private def buildNewDataIfPointXMoreThanZero =
+      buildNewDataIfValid((data: MoveAction) => data.point.x > 0) _
+
+    private def buildNewDataIfValid
+    (isValid: MoveAction => Boolean)
+    (data: MoveAction)
+    (newPoint: Point)
+    : MoveAction =
+      if (isValid(data)) {
+        data.copy(point = newPoint)
+      } else {
+        data
+      }
+  }
+
+  implicit object ActionTurnRight extends Action[TurnRight] {
+    override def run(data: TurnRight): TurnRight = data.direction match {
+      case Direction.N => TurnRight(Direction.E)
+      case Direction.E => TurnRight(Direction.S)
+      case Direction.S => TurnRight(Direction.W)
+      case Direction.W => TurnRight(Direction.N)
+      case _ => data
     }
   }
 
-  implicit object ActionTurn extends Action[(Instruction, Direction), Direction] {
-    override def run(data: (Instruction, Direction)): Direction = data match {
-      case (Instruction.D, direction: Direction) => withInstructionD(direction)
-      case (Instruction.G, direction: Direction) => withInstructionG(direction)
-      case _ => data._2
-    }
-
-    private def withInstructionD(direction: Direction): Direction = direction match {
-      case Direction.N => Direction.E
-      case Direction.E => Direction.S
-      case Direction.S => Direction.W
-      case Direction.W => Direction.N
-      case _ => direction
-    }
-
-    private def withInstructionG(direction: Direction): Direction = direction match {
-      case Direction.N => Direction.W
-      case Direction.E => Direction.N
-      case Direction.S => Direction.E
-      case Direction.W => Direction.S
-      case _ => direction
+  implicit object ActionTurnLeft extends Action[TurnLeft] {
+    override def run(data: TurnLeft): TurnLeft = data.direction match {
+      case Direction.N => TurnLeft(Direction.W)
+      case Direction.E => TurnLeft(Direction.N)
+      case Direction.S => TurnLeft(Direction.E)
+      case Direction.W => TurnLeft(Direction.S)
+      case _ => data
     }
   }
 
-  def of[A, B](implicit action: Action[A, B]): Action[A, B] = action
+  def of[A](implicit action: Action[A]): Action[A] = action
+
 }
