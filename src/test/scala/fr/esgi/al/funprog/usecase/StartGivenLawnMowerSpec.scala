@@ -12,12 +12,12 @@ class StartGivenLawnMowerSpec extends AnyFunSpec {
     describe("when givenLawnMower point is (x=0, y=0), direction=W, instructions =['A', 'A', 'A']") {
       val lawnMower = LawnMower(
         start = Position(
-          Point(0, 0),
+          point = Point(0, 0),
           Direction.W
         ),
         instructions = List(Instruction.A, Instruction.A, Instruction.A),
         end = Position(
-          Point(0, 0),
+          point = Point(0, 0),
           Direction.W
         )
       )
@@ -34,19 +34,19 @@ class StartGivenLawnMowerSpec extends AnyFunSpec {
       describe("and direction=N") {
         val lawnMower = LawnMower(
           start = Position(
-            Point(x = 1, y = 1),
-            Direction.N
+            point = Point(x = 1, y = 1),
+            direction = Direction.N
           ),
           instructions = List(Instruction.A),
           end = Position(
-            Point(x = 1, y = 1),
-            Direction.N
+            point = Point(x = 1, y = 1),
+            direction = Direction.N
           )
         )
         it("should change end point of result lawn mower to (x=1, y=2)") {
           val expectedLawnMower = lawnMower.copy(end = Position(
             Point(x = 1, y = 2),
-            Direction.N
+            direction = Direction.N
           ))
           startGivenLawnMower.execute(limit, lawnMower) shouldBe expectedLawnMower
         }
@@ -54,19 +54,19 @@ class StartGivenLawnMowerSpec extends AnyFunSpec {
       describe("and direction=E") {
         val lawnMower = LawnMower(
           start = Position(
-            Point(x = 1, y = 1),
-            Direction.E
+            point = Point(x = 1, y = 1),
+            direction = Direction.E
           ),
           instructions = List(Instruction.A),
           end = Position(
-            Point(x = 1, y = 1),
-            Direction.E
+            point = Point(x = 1, y = 1),
+            direction = Direction.E
           )
         )
         it("should change end point if result lawn mower to (x=1, y=2") {
           val expectedLawnMower = lawnMower.copy(end = Position(
-            Point(x = 2, y = 1),
-            Direction.E
+            point = Point(x = 2, y = 1),
+            direction = Direction.E
           ))
           startGivenLawnMower.execute(limit, lawnMower) shouldBe expectedLawnMower
         }
@@ -74,19 +74,19 @@ class StartGivenLawnMowerSpec extends AnyFunSpec {
       describe("and direction=S") {
         val lawnMower = LawnMower(
           start = Position(
-            Point(x = 1, y = 1),
-            Direction.S
+            point = Point(x = 1, y = 1),
+            direction = Direction.S
           ),
           instructions = List(Instruction.A),
           end = Position(
-            Point(x = 1, y = 1),
-            Direction.S
+            point = Point(x = 1, y = 1),
+            direction = Direction.S
           )
         )
         it("should change end point if result lawn mower to (x=1, y=0") {
           val expectedLawnMower = lawnMower.copy(end = Position(
-            Point(x = 1, y = 0),
-            Direction.S
+            point = Point(x = 1, y = 0),
+            direction = Direction.S
           ))
           startGivenLawnMower.execute(limit, lawnMower) shouldBe expectedLawnMower
         }
@@ -94,19 +94,19 @@ class StartGivenLawnMowerSpec extends AnyFunSpec {
       describe("and direction=W") {
         val lawnMower = LawnMower(
           start = Position(
-            Point(x = 1, y = 1),
-            Direction.W
+            point = Point(x = 1, y = 1),
+            direction = Direction.W
           ),
           instructions = List(Instruction.A),
           end = Position(
-            Point(x = 1, y = 1),
-            Direction.W
+            point = Point(x = 1, y = 1),
+            direction = Direction.W
           )
         )
         it("should change end point if result lawn mower to (x=0, y=1") {
           val expectedLawnMower = lawnMower.copy(end = Position(
-            Point(x = 0, y = 1),
-            Direction.W
+            point = Point(x = 0, y = 1),
+            direction = Direction.W
           ))
           startGivenLawnMower.execute(limit, lawnMower) shouldBe expectedLawnMower
         }
@@ -116,19 +116,19 @@ class StartGivenLawnMowerSpec extends AnyFunSpec {
       describe("and instructions=[D]") {
         val lawnMower = LawnMower(
           start = Position(
-            Point(x = 1, y = 1),
-            Direction.N
+            point = Point(x = 1, y = 1),
+            direction = Direction.N
           ),
           instructions = List(Instruction.D),
           end = Position(
-            Point(x = 1, y = 1),
-            Direction.N
+            point = Point(x = 1, y = 1),
+            direction = Direction.N
           )
         )
         it("should change direction to direction=E") {
           val expectedLawnMower = lawnMower.copy(end = Position(
-            Point(x = 1, y = 1),
-            Direction.E
+            point = Point(x = 1, y = 1),
+            direction = Direction.E
           ))
           startGivenLawnMower.execute(limit, lawnMower) shouldBe expectedLawnMower
         }
@@ -136,19 +136,19 @@ class StartGivenLawnMowerSpec extends AnyFunSpec {
       describe("and instructions=[G]") {
         val lawnMower = LawnMower(
           start = Position(
-            Point(x = 1, y = 1),
-            Direction.N
+            point = Point(x = 1, y = 1),
+            direction = Direction.N
           ),
           instructions = List(Instruction.G),
           end = Position(
-            Point(x = 1, y = 1),
-            Direction.N
+            point = Point(x = 1, y = 1),
+            direction = Direction.N
           )
         )
         it("should change direction to direction=W") {
           val expectedLawnMower = lawnMower.copy(end = Position(
-            Point(x = 1, y = 1),
-            Direction.W
+            point = Point(x = 1, y = 1),
+            direction = Direction.W
           ))
           startGivenLawnMower.execute(limit, lawnMower) shouldBe expectedLawnMower
         }

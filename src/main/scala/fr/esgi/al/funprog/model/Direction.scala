@@ -1,5 +1,7 @@
 package fr.esgi.al.funprog.model
 
+import fr.esgi.al.funprog.parser.WritesCsv
+import fr.esgi.al.funprog.parser.csv.CsvValue
 import play.api.libs.json.{JsString, JsValue, Writes}
 
 sealed trait Direction extends Product with Serializable
@@ -41,5 +43,9 @@ object Direction {
 
   implicit object WritesDirection extends Writes[Direction] {
     override def writes(o: Direction): JsValue = JsString(Direction.mapToString(o))
+  }
+
+  implicit object WritesCsvDirection extends WritesCsv[Direction] {
+    override def writes(value: Direction): CsvValue = WritesCsv.of[String].writes(mapToString(value))
   }
 }

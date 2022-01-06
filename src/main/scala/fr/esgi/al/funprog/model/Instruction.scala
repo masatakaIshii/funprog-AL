@@ -1,5 +1,7 @@
 package fr.esgi.al.funprog.model
 
+import fr.esgi.al.funprog.parser.WritesCsv
+import fr.esgi.al.funprog.parser.csv.CsvValue
 import play.api.libs.json.{JsString, JsValue, Writes}
 
 sealed trait Instruction extends Product with Serializable
@@ -29,9 +31,9 @@ object Instruction {
   }
 
   def mapToString(instruction: Instruction): String = instruction match {
-    case A              => "A"
-    case G              => "G"
-    case D              => "D"
+    case A => "A"
+    case G => "G"
+    case D => "D"
     case NotInstruction => "not instruction"
   }
 
@@ -39,4 +41,7 @@ object Instruction {
     override def writes(o: Instruction): JsValue = JsString(Instruction.mapToString(o))
   }
 
+  implicit object WritesCsvInstruction extends WritesCsv[Instruction] {
+    override def writes(value: Instruction): CsvValue = WritesCsv.of[String].writes(mapToString(value))
+  }
 }
