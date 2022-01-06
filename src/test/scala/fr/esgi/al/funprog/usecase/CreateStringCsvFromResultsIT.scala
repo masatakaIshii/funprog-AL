@@ -5,9 +5,12 @@ import org.scalatest.funspec.AnyFunSpec
 import org.scalatest.matchers.should.Matchers.convertToAnyShouldWrapper
 
 class CreateStringCsvFromResultsIT extends AnyFunSpec {
-  val createStringCsvFromResults: CreateStringCsvFromResults = CreateStringCsvFromResults()
+  val createStringCsvFromResults: CreateStringCsvFromResults =
+    CreateStringCsvFromResults()
 
-  describe("given one lawnMower start=(point(x=1,y=2), direction.N), instructions=A, end=(point(x=2, y=1), direction.E)") {
+  describe(
+    "given one lawnMower start=(point(x=1,y=2), direction.N), instructions=A, end=(point(x=2, y=1), direction.E)"
+  ) {
     val lawnMower = LawnMower(
       start = Position(
         point = Point(x = 1, y = 2),
@@ -20,10 +23,10 @@ class CreateStringCsvFromResultsIT extends AnyFunSpec {
       )
     )
     it("should return expected result") {
-      val expectedResult =
-        """numéro;début_x;début_y;début_direction;fin_x;fin_y;fin_direction;instructions
-          |1;1;2;E;2;2;E;A
-          |""".stripMargin
+      val expectedResult = List(
+        "numéro;début_x;début_y;début_direction;fin_x;fin_y;fin_direction;instructions",
+        "1;1;2;E;2;2;E;A"
+      ).mkString(System.lineSeparator()) + System.lineSeparator()
       val result = createStringCsvFromResults.execute(List(lawnMower))
       result shouldBe expectedResult
     }
@@ -35,7 +38,17 @@ class CreateStringCsvFromResultsIT extends AnyFunSpec {
         point = Point(x = 1, y = 2),
         direction = Direction.N
       ),
-      instructions = List(Instruction.G, Instruction.A, Instruction.G, Instruction.A, Instruction.G, Instruction.A, Instruction.G, Instruction.A, Instruction.A),
+      instructions = List(
+        Instruction.G,
+        Instruction.A,
+        Instruction.G,
+        Instruction.A,
+        Instruction.G,
+        Instruction.A,
+        Instruction.G,
+        Instruction.A,
+        Instruction.A
+      ),
       end = Position(
         point = Point(x = 1, y = 3),
         direction = Direction.N
@@ -46,7 +59,18 @@ class CreateStringCsvFromResultsIT extends AnyFunSpec {
         point = Point(x = 3, y = 3),
         direction = Direction.E
       ),
-      instructions = List(Instruction.A, Instruction.A, Instruction.D, Instruction.A, Instruction.A, Instruction.D, Instruction.A, Instruction.D, Instruction.D, Instruction.A),
+      instructions = List(
+        Instruction.A,
+        Instruction.A,
+        Instruction.D,
+        Instruction.A,
+        Instruction.A,
+        Instruction.D,
+        Instruction.A,
+        Instruction.D,
+        Instruction.D,
+        Instruction.A
+      ),
       end = Position(
         point = Point(x = 5, y = 1),
         direction = Direction.E
@@ -54,11 +78,11 @@ class CreateStringCsvFromResultsIT extends AnyFunSpec {
     )
     val lawnMowerList = List(firstLawnMower, secondLawnMower)
     it("should return expected result") {
-      val result =
-        """numéro;début_x;début_y;début_direction;fin_x;fin_y;fin_direction;instructions
-          |1;1;2;N;1;3;N;GAGAGAGAA
-          |2;3;3;E;5;1;E;AADAADADDA
-          |""".stripMargin
+      val result = List(
+        "numéro;début_x;début_y;début_direction;fin_x;fin_y;fin_direction;instructions",
+        "1;1;2;N;1;3;N;GAGAGAGAA",
+        "2;3;3;E;5;1;E;AADAADADDA"
+      ).mkString(System.lineSeparator()) + System.lineSeparator()
 
       createStringCsvFromResults.execute(lawnMowerList) shouldBe result
     }
