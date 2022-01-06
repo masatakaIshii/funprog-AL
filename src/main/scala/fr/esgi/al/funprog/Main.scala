@@ -1,6 +1,6 @@
 package fr.esgi.al.funprog
 
-import fr.esgi.al.funprog.usecase.{CreateJsonFromResults, ReadFileInstructions, SaveToJsonFile, StartGivenLawnMower}
+import fr.esgi.al.funprog.usecase.{CreateJsonFromResults, CreateStringCsvFromResults, ReadFileInstructions, SaveStringToFile, SaveToJsonFile, StartGivenLawnMower}
 
 
 object Main extends App {
@@ -18,13 +18,9 @@ object Main extends App {
   println("Result is save at the path : " + filePath)
 
 
+  val csv = CreateStringCsvFromResults().execute(uesh)
 
+  val csvFilePath = SaveStringToFile().execute(csv, "resultCsv.csv")
 
-  // jsonArrayString.toList.foreach(row => f.createIfNotExists().appendLine(row))
-
-  // Le code suivant ne compilera pas.
-  // var tmp = null;
-  // var tmp2 = if (tmp == 1) "yes" else 1
-
-  // println(s"tmp: $tmp, tmp2: $tmp2")
+  println("Result csvFile is save at the path : " + csvFilePath)
 }
