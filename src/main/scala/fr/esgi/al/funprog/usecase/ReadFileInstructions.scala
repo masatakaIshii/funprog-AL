@@ -6,8 +6,8 @@ import fr.esgi.al.funprog.model.{Direction, Instruction, LawnMower, Point, Posit
 import scala.collection.mutable.ListBuffer
 
 class ReadFileInstructions {
-  def execute(filename: String): (Point, List[LawnMower]) = {
-    val f = File("src/main/resources/" + filename)
+  def execute(filename: String): (Point, List[LawnMower])  = {
+    val f = File(filename)
     val listOfInstructions = f.lines.toList
     if (listOfInstructions.length % 2 == 1) {
       //throw new Error("Parsing of " + filename + "impossible")

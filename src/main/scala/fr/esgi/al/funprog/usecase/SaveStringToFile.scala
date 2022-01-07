@@ -4,11 +4,10 @@ import better.files.File
 
 class SaveStringToFile {
   def execute(value: String, filename: String): String = {
-    val pathFile = "results/" + filename
-    val file = File(pathFile)
+    val file = File(filename)
     file.createIfNotExists(createParents = true).overwrite("").append(value)
 
-    pathFile
+    filename
   }
 }
 

@@ -5,12 +5,11 @@ import play.api.libs.json.{JsValue, Json}
 
 class SaveToJsonFile {
   def execute(json: JsValue, filename: String): String = {
-    val pathFile = "results/" + filename
-    val f = File(pathFile)
+    val f = File(filename)
     val jsonString = Json prettyPrint json
     f.createIfNotExists(createParents = true).overwrite("").append(jsonString)
 
-    pathFile
+    filename
   }
 
 }
