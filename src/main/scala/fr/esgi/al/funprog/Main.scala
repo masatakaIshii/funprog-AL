@@ -1,7 +1,11 @@
 package fr.esgi.al.funprog
 
 import com.typesafe.config.{Config, ConfigFactory}
+import fr.esgi.al.funprog.exception.DonneesIncorectesException
+import fr.esgi.al.funprog.model.{LawnMower, Point}
 import fr.esgi.al.funprog.usecase.{CreateJsonFromResults, CreateStringCsvFromResults, ReadFileInstructions, SaveStringToFile, SaveToJsonFile, StartGivenLawnMower}
+
+import scala.util.{Failure, Success}
 
 
 object Main extends App {
@@ -12,21 +16,30 @@ object Main extends App {
   val outputJson = conf.getString("application.output-json-file")
   val outputCsv = conf.getString("application.output-csv-file")
 
-  val test = ReadFileInstructions().execute(inputFile)
-  val funProg =FunProg.apply(startGivenLawnMower = StartGivenLawnMower())
-  val uesh = funProg.start(test._1, test._2)
+  val parsedFile = ReadFileInstructions().execute(inputFile)
 
-  println(uesh)
-  val json = CreateJsonFromResults().execute(uesh, test._1)
-  println(json)
+  parsedFile match {
+    case Success(value: (Point, List[LawnMower])) => {
+      val funProg =FunProg.apply(startGivenLawnMower = StartGivenLawnMower())
+      val uesh = funProg.start(value._1, value._2)
 
-  val filePath = SaveToJsonFile.apply().execute(json,outputJson)
+      println(uesh)
+      val json = CreateJsonFromResults().execute(uesh, value._1)
+      println(json)
 
-  println("Result is save at the path : " + filePath)
+      val filePath = SaveToJsonFile.apply().execute(json,outputJson)
 
-  val csv = CreateStringCsvFromResults().execute(uesh)
+      println("Result is save at the path : " + filePath)
 
-  val csvFilePath = SaveStringToFile().execute(csv, outputCsv)
+      val csv = CreateStringCsvFromResults().execute(uesh)
 
-  println("Result csvFile is save at the path : " + csvFilePath)
+      val csvFilePath = SaveStringToFile().execute(csv, outputCsv)
+
+      println("Result csvFile is save at the path : " + csvFilePath)
+    }
+    case Failure(exception: DonneesIncorectesException) => println(exception.message)
+
+    case Failure(_) => println("Unknown error")
+  }
+
 }

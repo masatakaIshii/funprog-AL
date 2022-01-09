@@ -1,46 +1,82 @@
 package fr.esgi.al.funprog.usecase
 
 import better.files.File
+import fr.esgi.al.funprog.exception.DonneesIncorectesException
+import fr.esgi.al.funprog.model.Direction.NotDirection
+import fr.esgi.al.funprog.model.Instruction.NotInstruction
 import fr.esgi.al.funprog.model.{Direction, Instruction, LawnMower, Point, Position}
 
 import scala.collection.mutable.ListBuffer
+import scala.util.{Failure, Success, Try}
 
 class ReadFileInstructions {
-  def execute(filename: String): (Point, List[LawnMower])  = {
+  def execute(filename: String): Try[(Point, List[LawnMower])]  = {
     val f = File(filename)
     val listOfInstructions = f.lines.toList
-    if (listOfInstructions.length % 2 == 1) {
-      //throw new Error("Parsing of " + filename + "impossible")
+    if (listOfInstructions.length % 2 == 1 && listOfInstructions.length < 3) {
+      Failure(new DonneesIncorectesException("Number of lines incompatible"))
+    } else {
+      val arraySizeOption = listOfInstructions.headOption
+
+      val splitArraySize = arraySizeOption.fold(ifEmpty = {
+        Array.empty[Int]
+      })(value => {
+        value.split(' ').map(value => value.toInt)
+      })
+      if(splitArraySize.length < 2) {
+        Failure(new DonneesIncorectesException("Can't find array limits"))
+      } else {
+        val arrayDimension = Point(splitArraySize(0), splitArraySize(1))
+
+        val lowMowersInformation = listOfInstructions.drop(1)
+        val lawnMowers = new ListBuffer[LawnMower]()
+
+         for (idx <- lowMowersInformation.indices by 2){
+          val lowMowerPosition = lowMowersInformation(idx)
+          val arrayLowMowerPosition = lowMowerPosition.split(' ')
+          val startPoint = Point(arrayLowMowerPosition(0).toInt, arrayLowMowerPosition(1).toInt)
+          val direction = Direction.mapFromString(arrayLowMowerPosition(2))
+
+          val lowMowerInstructions = lowMowersInformation(idx + 1)
+          val listInstructions = lowMowerInstructions.map(instruction => Instruction.mapFromChar(instruction))
+
+          val lawnMower = LawnMower(start = Position(startPoint, direction), instructions = listInstructions.toList, end = Position(startPoint, direction))
+          lawnMowers += lawnMower
+        }
+
+        Success((arrayDimension,lawnMowers.toList))
+      }
     }
+  }
 
-    val arraySizeOption = listOfInstructions.headOption
+  def generateLawnMower(listInstruction: List[String], result: Try[List[LawnMower]]): Try[List[LawnMower]] = (result,listInstruction) match {
+    case (Failure(exception),_) => Failure(exception)
+    case (_,Nil) => result
+    case (Success(previousList),first :: second :: rest) => {
+      val arrayLowMowerPosition = first.split(' ')
+      if(arrayLowMowerPosition.length < 3) {
+        Failure(DonneesIncorectesException("Missing position or direction for lawnMower"))
+      } else if(arrayLowMowerPosition(0).toInt < 0 || arrayLowMowerPosition(0).toInt > 5
+              || arrayLowMowerPosition(1).toInt < 0 || arrayLowMowerPosition(1).toInt > 5) {
+        Failure(DonneesIncorectesException("Position out of bound for loawnMower initialisation"))
+      } else if(Direction.mapFromString(arrayLowMowerPosition(2)) == NotDirection) {
+        Failure(DonneesIncorectesException("There is a direction that doesn't exist"))
+      } else {
+        val startPoint = Point(arrayLowMowerPosition(0).toInt, arrayLowMowerPosition(1).toInt)
+        val direction = Direction.mapFromString(arrayLowMowerPosition(2))
 
-    val splitArraySize = arraySizeOption.fold(ifEmpty = {
-      //throw new Error("Can't find array limits")
-      Array.empty[Int]
-    })(value => {
-      value.split(' ').map(value => value.toInt)
-    })
+        val listInstructions = second.map(instruction => Instruction.mapFromChar(instruction))
+        if(listInstructions.contains(NotInstruction)) {
+          Failure(DonneesIncorectesException("There are instruction that doesn't exist"))
+        } else {
+          val lawnMower = LawnMower(start = Position(startPoint, direction), instructions = listInstructions.toList, end = Position(startPoint, direction))
 
-    val arrayDimension = Point(splitArraySize(0), splitArraySize(1))
-
-    val lowMowersInformation = listOfInstructions.drop(1)
-    val lawnMowers = new ListBuffer[LawnMower]()
-
-    for (idx <- lowMowersInformation.indices by 2){
-      val lowMowerPosition = lowMowersInformation(idx)
-      val arrayLowMowerPosition = lowMowerPosition.split(' ')
-      val startPoint = Point(arrayLowMowerPosition(0).toInt, arrayLowMowerPosition(1).toInt)
-      val direction = Direction.mapFromString(arrayLowMowerPosition(2))
-
-      val lowMowerInstructions = lowMowersInformation(idx + 1)
-      val listInstructions = lowMowerInstructions.map(instruction => Instruction.mapFromChar(instruction))
-
-      val lawnMower = LawnMower(start = Position(startPoint,direction), instructions = listInstructions.toList, end = Position(startPoint, direction))
-      lawnMowers += lawnMower
+          generateLawnMower(rest, Success(previousList :+ lawnMower))
+        }
+      }
     }
+    case(Success(_),List(_)) => result
 
-    (arrayDimension,lawnMowers.toList)
   }
 
 }
