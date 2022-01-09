@@ -3,7 +3,7 @@ package fr.esgi.al.funprog
 import com.typesafe.config.{Config, ConfigFactory}
 import fr.esgi.al.funprog.exception.DonneesIncorectesException
 import fr.esgi.al.funprog.model.{LawnMower, Point}
-import fr.esgi.al.funprog.usecase.{CreateJsonFromResults, CreateStringCsvFromResults, ReadFileInstructions, SaveStringToFile, SaveToJsonFile, StartGivenLawnMower}
+import fr.esgi.al.funprog.usecase.{CreateJsonFromResults, CreateStringCsvFromResults, ReadFileInstructions, SaveStringToFile, StartGivenLawnMower}
 
 import scala.util.{Failure, Success}
 
@@ -21,19 +21,18 @@ object Main extends App {
   parsedFile match {
     case Success(value: (Point, List[LawnMower])) => {
       val funProg =FunProg.apply(startGivenLawnMower = StartGivenLawnMower())
-      val uesh = funProg.start(value._1, value._2)
+      val result = funProg.start(value._1, value._2)
+      val saveStringToFile = SaveStringToFile()
 
-      println(uesh)
-      val json = CreateJsonFromResults().execute(uesh, value._1)
-      println(json)
+      val json = CreateJsonFromResults().execute(result, value._1)
 
-      val filePath = SaveToJsonFile.apply().execute(json,outputJson)
+      val filePath = saveStringToFile.execute(json,outputJson)
 
       println("Result is save at the path : " + filePath)
 
-      val csv = CreateStringCsvFromResults().execute(uesh)
+      val csv = CreateStringCsvFromResults().execute(result)
 
-      val csvFilePath = SaveStringToFile().execute(csv, outputCsv)
+      val csvFilePath = saveStringToFile.execute(csv, outputCsv)
 
       println("Result csvFile is save at the path : " + csvFilePath)
     }
